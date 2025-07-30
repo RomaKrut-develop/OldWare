@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="forum-header">
+    <h2>Создать новую категорию</h2>
+</div>
+
+<div class="user-panel">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.name.label }}<br>
+            {{ form.name(size=40) }}
+            {% for error in form.name.errors %}
+                <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.description.label }}<br>
+            {{ form.description(rows=3, cols=50) }}
+        </div>
+        <div>
+            {{ form.submit(class="button") }}
+        </div>
+    </form>
+</div>
+{% endblock %}

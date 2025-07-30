@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="forum-header">
+    <h2>Добро пожаловать на OldWare</h2>
+    <p>Архив фоторгафий, файлов, игр. Форум.</p>
+</div>
+
+<div class="user-panel">
+    {% if current_user.is_authenticated %}
+        <div class="user-info">
+            <div class="user-avatar"> {{ current_user.username[0] }}</div>
+            <div>
+                Привет, <strong>{{ current_user.username }}</strong>! 
+                {% if current_user.is_admin %}
+                    <span>(Admin)</span>
+                {% endif %}
+            </div>
+        </div>
+        <div>
+            <a href="{{ url_for('logout') }}" class="button">Выйти</a>
+            {% if current_user.is_admin %}
+                <a href="{{ url_for('admin_panel') }}" class="button">Админка</a>
+            {% endif %}
+        </div>
+    {% else %}
+        <a href="{{ url_for('login') }}" class="button">Войти</a>
+        <a href="{{ url_for('register') }}" class="button">Регистрация</a>
+    {% endif %}
+</div>
+
+<div class="forum-categories">
+    <div class="category">
+        Категории
+    </div>
+    
+    {% for category in categories %}
+    <div class="forum">
+        <div class="forum-icon">C</div>
+        <div class="forum-info">
+            <div class="forum-name"><a href="{{ url_for('view_category', category_id=category.id) }}">{{ category.name }}</a></div>
+            <div class="forum-description">{{ category.description }}</div>
+        </div>
+        <div class="forum-stats">
+            Публикации: {{ category.posts|length }}
+        </div>
+    </div>
+    
+    <!-- Display latest posts in this category -->
+    {% set latest_posts = category.posts|sort(attribute='created_at', reverse=True)|list %}
+    {% for post in latest_posts[:3] %}
+    <div class="forum" style="background-color: #f8f8f8; padding-left: 40px;">
+        <div class="forum-icon">P</div>
+        <div class="forum-info">
+            <div class="forum-name">
+                <a href="{{ url_for('view_post', post_id=post.id) }}">{{ post.title }}</a>
+            </div>
+            <div class="forum-description">
+                От {{ post.author.username }}  {{ post.created_at.strftime('%Y-%m-%d %H:%M') }}
+            </div>
+        </div>
+        <div class="forum-stats">
+            Комментарии: {{ post.comments|length }}
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="forum">
+        <div class="forum-info">
+            <div class="forum-description">Пока нет категорий. {% if current_user.is_admin %}<a href="{{ url_for('create_category') }}">Создать</a>{% endif %}</div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="user-panel" style="margin-top: 20px;">
+    <h3>Последняя активность</h3>
+    {% for post in recent_posts %}
+    <div style="margin-bottom: 10px;">
+        <a href="{{ url_for('view_post', post_id=post.id) }}">{{ post.title }}</a>
+        <span style="font-size: 12px; color: #666;">
+            в {{ post.category.name }} от {{ post.author.username }} ({{ post.created_at.strftime('%Y-%m-%d') }})
+        </span>
+    </div>
+    {% else %}
+    <p>Нет активности</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Технологии остаются здесь</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="forum-container">
+        <div class="window">
+            <div class="title-text">
+                <span class="title-icon"></span>
+                OldWare
+            </div>
+            <div class="window-buttons">
+                <div class="window-button">_</div>
+                <div class="window-button">□</div>
+                <div class="window-button close">x</div>
+            </div>
+        </div>
+        
+        <div class="window-content">
+            {% block content %}{% endblock %}
+        </div>
+        
+        <div class="status-bar">
+            <div>
+                {% if current_user.is_authenticated %}
+                    Вы вошли как: {{ current_user.username }}
+                {% else %}
+                    Гость
+                {% endif %}
+            </div>
+            <div>OldWare</div>
+        </div>
+    </div>
+</body>
+</html>

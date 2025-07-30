@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="forum-header">
+    <h2>{{ category.name }}</h2>
+    <p>{{ category.description }}</p>
+</div>
+<form style="margin-bottom: 10px;" action="/">
+    <button>Назад</button>
+</form>
+{% if current_user.is_authenticated %}
+<div class="user-panel">
+    <a href="{{ url_for('create_post', category_id=category.id) }}" class="button">Создать новую публикацию</a>
+</div>
+{% endif %}
+
+<div class="forum-categories">
+    <div class="category">
+        Публикации
+    </div>
+    
+    {% for post in posts %}
+    <div class="forum">
+        <div class="forum-icon">P</div>
+        <div class="forum-info">
+            <div class="forum-name"><a href="{{ url_for('view_post', post_id=post.id) }}">{{ post.title }}</a></div>
+            <div class="forum-description">
+                От {{ post.author.username }} в {{ post.created_at.strftime('%Y-%m-%d %H:%M') }}
+            </div>
+        </div>
+        <div class="forum-stats">
+            Комментарии: {{ post.comments|length }}
+        </div>
+    </div>
+    {% else %}
+    <div class="forum">
+        <div class="forum-info">
+            <div class="forum-description">Нет постов. Начнем творить!</div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

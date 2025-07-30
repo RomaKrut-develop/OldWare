@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="forum-header">
+    <h2>Это админка</h2>
+</div>
+
+<div class="user-panel">
+    <a href="{{ url_for('create_category') }}" class="button">Создать категории</a>
+</div>
+
+<div class="forum-categories">
+    {% for category in categories %}
+    <div class="category">
+        {{ category.name }}
+    </div>
+    <div class="forum">
+        <div class="forum-icon">C</div>
+        <div class="forum-info">
+            <div class="forum-name">{{ category.name }}</div>
+            <div class="forum-description">{{ category.description }}</div>
+        </div>
+        <div class="forum-stats">
+            Публикации: {{ category.posts|length }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

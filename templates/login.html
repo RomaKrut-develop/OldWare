@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="user-panel">
+    <h2>Войти</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.username.label }} {{ form.username() }}
+        {{ form.password.label }} {{ form.password() }}
+        {{ form.submit() }}
+    </form>
+    <p>Нет аккаунта? <a href="{{ url_for('register') }}">Регистрация</a></p>
+</div>
+<form action="/">
+    <button>Назад</button>
+</form>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="forum-header">
+    <h2>Регистрация</h2>
+</div>
+
+<div class="user-panel">
+    {% if error %}
+        <div style="color: red; padding: 10px; margin-bottom: 15px; background-color: #ffecec; border: 1px solid #ff6b6b;">
+            {{ error }}
+        </div>
+    {% endif %}
+    
+    {% if form.errors %}
+        <div style="color: red; padding: 10px; margin-bottom: 15px; background-color: #ffecec; border: 1px solid #ff6b6b;">
+            {% for field, errors in form.errors.items() %}
+                {% for error in errors %}
+                    <p>{{ form[field].label }}: {{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div style="margin-bottom: 15px;">
+            {{ form.username.label }}<br>
+            {{ form.username(size=32, class="form-input") }}
+        </div>
+        <div style="margin-bottom: 15px;">
+            {{ form.email.label }}<br>
+            {{ form.email(size=32, class="form-input") }}
+        </div>
+        <div style="margin-bottom: 15px;">
+            {{ form.password.label }}<br>
+            {{ form.password(size=32, class="form-input") }}
+        </div>
+        <div style="margin-bottom: 15px;">
+            {{ form.confirm_password.label }}<br>
+            {{ form.confirm_password(size=32, class="form-input") }}
+        </div>
+        <div>
+            {{ form.submit(class="button") }}
+        </div>
+    </form>
+    <p style="margin-top: 15px;">Уже есть аккаунт? <a href="{{ url_for('login') }}">Войти</a></p>
+</div>
+<form action="/">
+    <button>Назад</button>
+</form>
+{% endblock %}
