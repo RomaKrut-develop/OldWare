@@ -13,16 +13,16 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///forum.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app) # Инициализация базы данных
-login_manager = LoginManager(app)
+login_manager = LoginManager(app) # Загрузчик пользователей
 login_manager.login_view = 'login'
 
-@login_manager.user_loader
+@login_manager.user_loader # Роутер загрузчика пользователей
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-@app.route('/')
+@app.route('/') # Основной роутер
 def index():
-    categories = Category.query.all()
+    categories = Category.query.all() # Создаем категории
     return render_template('index.html', categories=categories)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -158,14 +158,5 @@ def delete_comment(comment_id):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        # Создание начального админа, если его нет
-        if not User.query.filter_by(username='admin').first():
-            admin = User(
-                username='admin',
-                email='admin@example.com',
-                password=generate_password_hash('adminpass'),
-                is_admin=True
-            )
-            db.session.add(admin)
-            db.session.commit()
+        
     app.run(debug=True)
